@@ -42,6 +42,7 @@
             this.kustutaBtn = new System.Windows.Forms.Button();
             this.uuendaBtn = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.LisaBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.toodePilt)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -123,6 +124,7 @@
             this.toodePilt.Size = new System.Drawing.Size(439, 216);
             this.toodePilt.TabIndex = 9;
             this.toodePilt.TabStop = false;
+            this.toodePilt.Click += new System.EventHandler(this.toodePilt_Click);
             // 
             // piltBtn
             // 
@@ -143,6 +145,7 @@
             this.liisaBtn.TabIndex = 11;
             this.liisaBtn.Text = "Liisa";
             this.liisaBtn.UseVisualStyleBackColor = true;
+            this.liisaBtn.Click += new System.EventHandler(this.liisaBtn_Click);
             // 
             // kustutaBtn
             // 
@@ -172,11 +175,23 @@
             this.dataGridView1.Size = new System.Drawing.Size(738, 164);
             this.dataGridView1.TabIndex = 14;
             // 
+            // LisaBtn
+            // 
+            this.LisaBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.LisaBtn.Location = new System.Drawing.Point(197, 151);
+            this.LisaBtn.Name = "LisaBtn";
+            this.LisaBtn.Size = new System.Drawing.Size(98, 35);
+            this.LisaBtn.TabIndex = 15;
+            this.LisaBtn.Text = "Liisa kategooria";
+            this.LisaBtn.UseVisualStyleBackColor = true;
+            this.LisaBtn.Click += new System.EventHandler(this.LisaBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.LisaBtn);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.uuendaBtn);
             this.Controls.Add(this.kustutaBtn);
@@ -217,6 +232,7 @@
         private System.Windows.Forms.Button kustutaBtn;
         private System.Windows.Forms.Button uuendaBtn;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button LisaBtn;
     }
 }
 
