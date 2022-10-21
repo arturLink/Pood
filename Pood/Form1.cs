@@ -16,6 +16,7 @@ namespace Pood
         SqlConnection connect=new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Link_TARpv21\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
         SqlCommand cmd;
         SqlDataAdapter adapter_toode,adapter_kat;
+        OpenFileDialog piltValiDialog;
         public Form1()
         {
             InitializeComponent();
@@ -152,7 +153,8 @@ namespace Pood
                     cmd.Parameters.AddWithValue("@toode", nimeBox.Text);
                     cmd.Parameters.AddWithValue("@kogus", kogusBox.Text);
                     cmd.Parameters.AddWithValue("@hind", hindBox.Text); //format andmebaasis võrdseb?
-                    cmd.Parameters.AddWithValue("@pilt", nimeBox.Text+".jpg"); //pilt format?
+                    cmd.Parameters.AddWithValue("@pilt", nimeBox.Text+"." +
+                        "jpg"); //pilt format?
                     cmd.Parameters.AddWithValue("@kat", katBox.SelectedIndex); //index?
                     cmd.ExecuteNonQuery();
                     connect.Close();
@@ -167,6 +169,55 @@ namespace Pood
             else
             {
                 MessageBox.Show("Sissesta andmeid");
+            }
+        }
+
+        private void kustutaBtn_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 0)
+                return;
+
+            string sql = "DELETE FROM Toodetable WHERE Id = @rowID";
+
+            using(SqlCommand deletedRecord = new SqlCommand(sql, connect)) 
+                {
+                    connect.Open();
+                    int selectedIndex = dataGridView1.SelectedRows[0].Index;
+                    int rowId = Convert.ToInt32(dataGridView1[0, selectedIndex].Value);
+                    deletedRecord.Parameters.Add("@rowID",SqlDbType.Int).Value = rowId;
+                    deletedRecord.ExecuteNonQuery();
+
+                    dataGridView1.Rows.RemoveAt(selectedIndex);
+                }
+        }
+
+        private void KatKstBtn_Click(object sender, EventArgs e)
+        {
+            if (katBox.Text=="")
+                return;
+
+            string sql = "DELETE FROM KategooriaTable WHERE KategooriaNimetus = @nimi";
+
+            using (SqlCommand cmd = new SqlCommand(sql, connect))
+            {
+                connect.Open();
+                cmd.Parameters.AddWithValue("@nimi", katBox.Text);
+                cmd.ExecuteNonQuery();
+                connect.Close();
+
+                Kustuta_Andmed();
+                Naita_Kategooria();
+            }
+        }
+
+        private void piltBtn_Click(object sender, EventArgs e)
+        {
+            piltValiDialog = new OpenFileDialog();
+            piltValiDialog.Filter = "JPEG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|All files (*.*)|*.*";
+
+            if (piltValiDialog.ShowDialog() == DialogResult.OK)
+            {
+                toodePilt.Load(piltValiDialog.FileName);
             }
         }
 
