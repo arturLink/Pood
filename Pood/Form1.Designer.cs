@@ -169,6 +169,7 @@
             this.uuendaBtn.TabIndex = 13;
             this.uuendaBtn.Text = "Uuenda";
             this.uuendaBtn.UseVisualStyleBackColor = true;
+            this.uuendaBtn.Click += new System.EventHandler(this.uuendaBtn_Click);
             // 
             // dataGridView1
             // 
