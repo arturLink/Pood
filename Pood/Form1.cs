@@ -18,6 +18,7 @@ namespace Pood
         SqlCommand cmd;
         SqlDataAdapter adapter_toode,adapter_kat;
         OpenFileDialog piltValiDialog;
+        SaveFileDialog saveValiDialog;
         public Form1()
         {
             InitializeComponent();
@@ -217,67 +218,65 @@ namespace Pood
         {
             piltValiDialog = new OpenFileDialog();
 
-            piltValiDialog.InitialDirectory=@"C:\Users\opilane\Downloads";
-            if (piltValiDialog.ShowDialog()==DialogResult.OK)
+            piltValiDialog.InitialDirectory = @"C:\Users\opilane\Downloads";
+            piltValiDialog.Filter = "Image Files(*.jpeg;*.bmp;*.png;*.jpg)|*.jpeg;*.bmp;*.png;*.jpg";
+            FileInfo open_info = new FileInfo(@"C:\Users\opilane\Downloads\" + piltValiDialog.FileName);
+            if (piltValiDialog.ShowDialog() == DialogResult.OK && nimeBox != null)
             {
-                string ext = Path.GetExtension(piltValiDialog.FileName);
-                toodePilt.Load(piltValiDialog.FileName);
-                Bitmap finalImg = new Bitmap(toodePilt.Image, toodePilt.Width, toodePilt.Height);
-                toodePilt.Image = finalImg;
-                toodePilt.Show();
-                string destinationFile;
-                try
+                saveValiDialog = new SaveFileDialog();
+                saveValiDialog.InitialDirectory = Path.GetFullPath(@"..\..\images");
+                saveValiDialog.FileName = nimeBox.Text + Path.GetExtension(piltValiDialog.FileName); //".jpg";            
+                saveValiDialog.Filter = "Image Files" + Path.GetExtension(piltValiDialog.FileName) + "|" + Path.GetExtension(piltValiDialog.FileName);
+
+
+                if (saveValiDialog.ShowDialog() == DialogResult.OK)
                 {
-                    destinationFile = @"..\..\images" + nimeBox.Text + ext;
-                    File.Copy(piltValiDialog.FileName, destinationFile);
-                }
-                catch //v slu4ae povtora dobaljaet 4islo k failu
-                {
-                    destinationFile = @"..\..\images" + nimeBox.Text + rnd.Next(1, 99999).ToString() + ext;
-                    File.Copy(piltValiDialog.FileName, destinationFile);
+                    File.Copy(piltValiDialog.FileName, saveValiDialog.FileName);
+                    saveValiDialog.RestoreDirectory = true;
+                    toodePilt.Image = Image.FromFile(saveValiDialog.FileName);
                 }
             }
         }
         int Id;
-        private void dataGridView1_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            Id = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
-            nimeBox.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-            kogusBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-            hindBox.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-            try
-            {
-                toodePilt.Image = Image.FromFile(@"..\..\images" + dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString());
-            }
-            catch (Exception)
-            {
-                toodePilt.Image = Image.FromFile(@"..\..\images\Info.png");
-                MessageBox.Show("Fail puudub");
-            }
-            string v = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
-            katBox.SelectedIndex = Int32.Parse(v) - 1;
-        } //check
+        //private void dataGridView1_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        //{
+        //    Id = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
+        //    nimeBox.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+        //    kogusBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+        //    hindBox.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+        //    try
+        //    {
+        //        toodePilt.Image = Image.FromFile(@"..\..\images" + dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString());
+        //    }
+        //    catch (Exception)
+        //    {
+        //        toodePilt.Image = Image.FromFile(@"..\..\images\Info.png");
+        //        MessageBox.Show("Fail puudub");
+        //    }
+        //    string v = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
+        //    katBox.SelectedIndex = Int32.Parse(v) - 1;
+        //} //check
 
         private void uuendaBtn_Click(object sender, EventArgs e) //sdelat UPDATE
         {
-            if (nimeBox.Text.Trim() != string.Empty && kogusBox.Text.Trim() != string.Empty &&
-                hindBox.Text.Trim() != string.Empty && katBox.SelectedItem != null)
+            if (nimeBox.Text != "" && kogusBox.Text != "" &&
+                hindBox.Text != "" && toodePilt.Image !=null)
             {
                 try
                 {
-                    cmd = new SqlCommand("INSERT INTO Toodetable (ToodeNimetus,Kogus,Hind,Pilt,KategooriaID)" +
-                        " VALUES (@toode,@kogus,@hind,@pilt,@kat)", connect);
+                    cmd = new SqlCommand("UPDATE Toodetable SET ToodeNimetus=@toode,Kogus=@kogus,Hind=@hind WHERE Id=@id", connect); //,Pilt = @pilt
                     connect.Open();
+                    cmd.Parameters.AddWithValue("@id", Id);
                     cmd.Parameters.AddWithValue("@toode", nimeBox.Text);
+                    cmd.Parameters.AddWithValue("@hind", hindBox.Text.Replace(",",".")); 
                     cmd.Parameters.AddWithValue("@kogus", kogusBox.Text);
-                    cmd.Parameters.AddWithValue("@hind", hindBox.Text); //format andmebaasis võrdseb?
-                    cmd.Parameters.AddWithValue("@pilt", nimeBox.Text + "." +
-                        "jpg"); //pilt format?
-                    cmd.Parameters.AddWithValue("@kat", katBox.SelectedIndex); //index?
+                    //string file_pilt = nimeBox.Text + ".jpg";
+                    //cmd.Parameters.AddWithValue("@pilt", file_pilt); 
                     cmd.ExecuteNonQuery();
                     connect.Close();
-                    Kustuta_Andmed();
                     Naita_Andmed();
+                    Kustuta_Andmed();
+                    MessageBox.Show("Andmed uuendatud");
                 }
                 catch (Exception)
                 {
@@ -288,6 +287,25 @@ namespace Pood
             {
                 MessageBox.Show("Sissesta andmeid");
             }
+        }
+
+        private void dataGridView1_RowHeaderMouseClick_1(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            Id = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
+            nimeBox.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+            kogusBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+            hindBox.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+            try
+            {
+                toodePilt.Image = Image.FromFile(@"..\..\images\" + dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString());
+            }
+            catch (Exception)
+            {
+                toodePilt.Image = Image.FromFile(@"..\..\images\Info.png");
+                MessageBox.Show("Fail puudub");
+            }
+            string v = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
+            katBox.SelectedIndex = Int32.Parse(v) - 1;
         }
 
         private void toodePilt_Click(object sender, EventArgs e)
