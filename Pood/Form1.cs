@@ -145,18 +145,16 @@ namespace Pood
         private void liisaBtn_Click(object sender, EventArgs e)
         {
             if (nimeBox.Text.Trim() != string.Empty && kogusBox.Text.Trim() != string.Empty &&
-                hindBox.Text.Trim() != string.Empty && katBox.SelectedItem != null)
+                hindBox.Text.Trim() != string.Empty && katBox.SelectedItem != null && Int32.Parse(hindBox.Text) > 0 && Int32.Parse(kogusBox.Text) > 0)
             {
                 try
                 {
-                    cmd = new SqlCommand("INSERT INTO Toodetable (ToodeNimetus,Kogus,Hind,Pilt,KategooriaID)" +
-                        " VALUES (@toode,@kogus,@hind,@pilt,@kat)", connect);
+                    cmd = new SqlCommand("INSERT INTO Toodetable (ToodeNimetus,Kogus,Hind,KategooriaID)" +
+                        " VALUES (@toode,@kogus,@hind,@kat)", connect); //@pilt, //Pilt
                     connect.Open();
                     cmd.Parameters.AddWithValue("@toode", nimeBox.Text);
                     cmd.Parameters.AddWithValue("@kogus", kogusBox.Text);
-                    cmd.Parameters.AddWithValue("@hind", hindBox.Text); //format andmebaasis võrdseb?
-                    cmd.Parameters.AddWithValue("@pilt", nimeBox.Text+"." +
-                        "jpg"); //pilt format?
+                    cmd.Parameters.AddWithValue("@hind", hindBox.Text);
                     cmd.Parameters.AddWithValue("@kat", katBox.SelectedIndex); //index?
                     cmd.ExecuteNonQuery();
                     connect.Close();
@@ -170,7 +168,7 @@ namespace Pood
             }
             else
             {
-                MessageBox.Show("Sissesta andmeid");
+                MessageBox.Show("Sissesta korektselt andmeid");
             }
         }
 
@@ -190,6 +188,7 @@ namespace Pood
                     deletedRecord.ExecuteNonQuery();
 
                     dataGridView1.Rows.RemoveAt(selectedIndex);
+                    connect.Close();
                 }
         }
 
@@ -238,25 +237,6 @@ namespace Pood
             }
         }
         int Id;
-        //private void dataGridView1_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        //{
-        //    Id = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
-        //    nimeBox.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-        //    kogusBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-        //    hindBox.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-        //    try
-        //    {
-        //        toodePilt.Image = Image.FromFile(@"..\..\images" + dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString());
-        //    }
-        //    catch (Exception)
-        //    {
-        //        toodePilt.Image = Image.FromFile(@"..\..\images\Info.png");
-        //        MessageBox.Show("Fail puudub");
-        //    }
-        //    string v = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
-        //    katBox.SelectedIndex = Int32.Parse(v) - 1;
-        //} //check
-
         private void uuendaBtn_Click(object sender, EventArgs e) //sdelat UPDATE
         {
             if (nimeBox.Text != "" && kogusBox.Text != "" &&
@@ -306,6 +286,11 @@ namespace Pood
             }
             string v = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
             katBox.SelectedIndex = Int32.Parse(v) - 1;
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
         private void toodePilt_Click(object sender, EventArgs e)
