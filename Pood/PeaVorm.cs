@@ -16,5 +16,17 @@ namespace Pood
         {
             InitializeComponent();
         }
+
+        private void juhtimineRunBtn_Click(object sender, EventArgs e)
+        {
+            Form1 form1 = new Form1();
+            form1.ShowDialog();
+        }
+
+        private void kaasaRunBtn_Click(object sender, EventArgs e)
+        {
+            Kaasa kaasa = new Kaasa();
+            kaasa.ShowDialog();
+        }
     }
 }
