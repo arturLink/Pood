@@ -14,7 +14,7 @@ namespace Pood
 {
     public partial class Form1 : Form
     {
-        SqlConnection connect=new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\artur\source\repos\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
+        SqlConnection connect=new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Link_TARpv21\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
         SqlCommand cmd;
         SqlDataAdapter adapter_toode,adapter_kat;
         OpenFileDialog piltValiDialog;
@@ -26,7 +26,8 @@ namespace Pood
         }
         public void Lisa_Andmed()
         {
-            if(nimeBox.Text.Trim()!=string.Empty && kogusBox.Text.Trim() != string.Empty &&
+            //CONSTRAINT [FK_Toodetable_ToTable] ([KategooriaID]) REFERENCES [dbo].[KategooriaTable] ([Id])
+            if (nimeBox.Text.Trim()!=string.Empty && kogusBox.Text.Trim() != string.Empty &&
                 hindBox.Text.Trim() != string.Empty && katBox.SelectedItem!= null)
             {
                 try

@@ -17,7 +17,7 @@ namespace Pood
     public partial class Kaasa : Form
     {
         SqlDataAdapter adapter_toode;
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\artur\source\repos\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Link_TARpv21\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
         public Kaasa()
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -72,18 +72,20 @@ namespace Pood
             //    MessageBox.Show("Kõik on korras");
             //}
 
-            for (int i = 0; i < Int32.Parse(kogusBox.Text); i++)
-            {
-                tooded.Add(nimiBox.Text);
-            }
+            tooded.Add(nimiBox.Text+" ("+kogusBox.Text.ToString()+")");
 
-            for (int i = 0; i < Int32.Parse(kogusBox.Text); i++)
-            {
-                hindeid.Add(Int32.Parse(hindBox.Text));
-            }
-            int sumHind = hindeid.Sum();
+            //for (int i = 0; i < Int32.Parse(kogusBox.Text); i++)
+            //{
+            //    tooded.Add(nimiBox.Text);
+            //}
 
-            
+            hindeid.Add(Int32.Parse(hindBox.Text)*Int32.Parse(kogusBox.Text));
+
+            //for (int i = 0; i < Int32.Parse(kogusBox.Text); i++)
+            //{
+            //    hindeid.Add(Int32.Parse(hindBox.Text));
+            //}
+
 
         }
 
@@ -113,7 +115,8 @@ namespace Pood
             string time=DateTime.Now.ToString("HH.mm.ss");
             string fileName = "tsek_"+time+".pdf";
 
-            document.Save("C:\\Users\\artur\\source\\repos\\Pood\\Pood\\tsekid\\"+fileName);
+            document.Save("C:\\Users\\opilane\\source\\repos\\Link_TARpv21\\Pood\\Pood\\tsekid\\" + fileName);
+            MessageBox.Show("Sinu tšek asub 'tsekid' kaust");
         }
         public void Naita_Andmed()
         {
