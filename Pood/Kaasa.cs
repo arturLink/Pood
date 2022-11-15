@@ -61,32 +61,24 @@ namespace Pood
 
         List<string> tooded = new List<string>();
         List<int> hindeid = new List<int>();
-        private void liisaKorvBtn_Click(object sender, EventArgs e)
+        private void liisaKorvBtn_Click(object sender, EventArgs e)  
         {
-            //if (Int32.Parse(kogusBox.Text) < 0 && Int32.Parse(kogusBox.Text) > Int32.Parse(dataGridView1.Rows[2].Cells[columnindex].Value.ToString()))
+            int row = dataGridView1.CurrentCell.RowIndex;
+            int col = dataGridView1.CurrentCell.ColumnIndex;
+            if (Convert.ToInt32(kogusBox.Text) < 0 ) //&& Convert.ToInt32(kogusBox.Text) > Convert.ToInt32(dataGridView1.Rows[row].Cells[col].Value.ToString())
+            {
+                MessageBox.Show("Palun sissesta korektselt andmed");
+            }
+            //ne rabotaet
+            //else if (Convert.ToInt32(kogusBox.Text) > Convert.ToInt32(dataGridView1.Rows[row].Cells[col].Value.ToString()))
             //{
             //    MessageBox.Show("Palun sissesta korektselt andmed");
             //}
-            //else
-            //{
-            //    MessageBox.Show("Kõik on korras");
-            //}
-
-            tooded.Add(nimiBox.Text+" ("+kogusBox.Text.ToString()+")");
-
-            //for (int i = 0; i < Int32.Parse(kogusBox.Text); i++)
-            //{
-            //    tooded.Add(nimiBox.Text);
-            //}
-
-            hindeid.Add(Int32.Parse(hindBox.Text)*Int32.Parse(kogusBox.Text));
-
-            //for (int i = 0; i < Int32.Parse(kogusBox.Text); i++)
-            //{
-            //    hindeid.Add(Int32.Parse(hindBox.Text));
-            //}
-
-
+            else
+            {
+                tooded.Add(nimiBox.Text + " (" + kogusBox.Text.ToString() + ")");
+                hindeid.Add(Convert.ToInt32(hindBox.Text) * Convert.ToInt32(kogusBox.Text));
+            }
         }
 
         private void ostaBtn_Click(object sender, EventArgs e)
