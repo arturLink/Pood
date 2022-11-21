@@ -17,7 +17,7 @@ namespace Pood
     public partial class Kaasa : Form
     {
         SqlDataAdapter adapter_toode;
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Link_TARpv21\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\vafle\source\repos\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
         public Kaasa()
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -107,7 +107,7 @@ namespace Pood
             string time=DateTime.Now.ToString("HH.mm.ss");
             string fileName = "tsek_"+time+".pdf";
 
-            document.Save("C:\\Users\\opilane\\source\\repos\\Link_TARpv21\\Pood\\Pood\\tsekid\\" + fileName);
+            document.Save("C:\\Users\\vafle\\source\\repos\\Pood\\Pood\\tsekid\\" + fileName);
             MessageBox.Show("Sinu tšek asub 'tsekid' kaust");
         }
         public void Naita_Andmed()

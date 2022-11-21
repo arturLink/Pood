@@ -13,6 +13,8 @@ namespace Pood
 {
     public partial class registratsioon : Form
     {
+        SqlDataAdapter adapter_Stat;
+        DataTable dt_Stat;
         SqlDataReader dr;
         SqlCommand cmd;
         SqlConnection cn;
@@ -21,10 +23,17 @@ namespace Pood
             InitializeComponent();
         }
 
+        public void Naita_Stat()
+        {
+            comboBox1.Items.Add("Omanik");
+            comboBox1.Items.Add("Kasutaja");
+        }
+
         private void registratsioon_Load(object sender, EventArgs e)
         {
-            cn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Link_TARpv21\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
+            cn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\vafle\source\repos\Pood\Pood\AppData\ToodedDB.mdf;Integrated Security=True");
             cn.Open();
+            Naita_Stat();
         }
 
         private void logBtn_Click(object sender, EventArgs e)
@@ -50,10 +59,12 @@ namespace Pood
                     else
                     {
                         dr.Close();
-                        cmd = new SqlCommand("insert into LoginTable values(@username,@password)", cn); //oma lause!!!!!!!!!!!!!!!!!!!!!!
-                        cmd.Parameters.AddWithValue("username", nimiBox.Text);
-                        cmd.Parameters.AddWithValue("password", paroolBox.Text);
-                        cmd.ExecuteNonQuery();
+                        cmd = new SqlCommand("INSERT INTO LoginTable (username,password,staatus)" +
+                        " VALUES (@name,@pass,@staat)", cn); //oma lause!!!!!!!!!!!!!!!!!!!!!!
+                        cmd.Parameters.AddWithValue("@name", nimiBox.Text);
+                        cmd.Parameters.AddWithValue("@pass", paroolBox.Text);
+                        cmd.Parameters.AddWithValue("@staat", comboBox1.SelectedIndex);
+                        cmd.ExecuteNonQuery(); //oshibka s staatusId(logintable) ili Id(staatus)
                         MessageBox.Show("Your Account is created . Please login now.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
