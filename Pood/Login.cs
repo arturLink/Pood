@@ -44,16 +44,13 @@ namespace Pood
         {
             if (paroolBox.Text != string.Empty || nimiBox.Text != string.Empty)
             {
-                string stat;
                 if(comboBox1.Text == "Kasutaja")
                 {
                     cmd = new SqlCommand("select * from LoginTable where username='" + nimiBox.Text + "' and password='" + paroolBox.Text + "'" + " and staatus='Kasutaja'", cn);
-                    stat = "Kasutaja";
                 }
                 else if(comboBox1.Text == "Omanik")
                 {
                     cmd = new SqlCommand("select * from LoginTable where username='" + nimiBox.Text + "' and password='" + paroolBox.Text + "'" + " and staatus='Omanik'", cn);
-                    stat = "Omanik";
                 }
                 
                 dr = cmd.ExecuteReader();
@@ -61,9 +58,6 @@ namespace Pood
                 {
                     dr.Close();
                     this.Hide();
-                    string command = cmd.ToString();
-                    string userNimi = nimiBox.Text.ToString();
-                    string parool = paroolBox.Text.ToString();
                     if (comboBox1.Text=="Kasutaja")
                     {
                         Kaasa kaasa= new Kaasa();
@@ -78,8 +72,6 @@ namespace Pood
                     {
                         MessageBox.Show("Kes sa oled?");
                     }
-                    //PeaVorm peaVorm= new PeaVorm();
-                    //peaVorm.ShowDialog();
                 }
                 else
                 {
